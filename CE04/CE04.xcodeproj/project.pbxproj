@@ -13,12 +13,10 @@
 		0991C0E81D0154EC007A6644 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0991C0E61D0154EC007A6644 /* LaunchScreen.storyboard */; };
 		0991C0F51D027DD8007A6644 /* TimeIntervals.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0991C0F41D027DD8007A6644 /* TimeIntervals.swift */; };
 		0991C0F81D03CF51007A6644 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0991C0F71D03CF51007A6644 /* AppDelegate.swift */; };
-		09D5B3861D0B4933009E1C7B /* Cheering.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 09D5B3821D0B4933009E1C7B /* Cheering.mp3 */; };
-		09D5B3871D0B4933009E1C7B /* NewsTheme.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 09D5B3831D0B4933009E1C7B /* NewsTheme.mp3 */; };
-		09D5B3881D0B4933009E1C7B /* taDa.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 09D5B3841D0B4933009E1C7B /* taDa.mp3 */; };
-		09D5B3891D0B4933009E1C7B /* wrong.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 09D5B3851D0B4933009E1C7B /* wrong.mp3 */; };
-		09D5B38B1D0B4E4F009E1C7B /* chime.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 09D5B38A1D0B4E4F009E1C7B /* chime.mp3 */; };
-		09D5B38D1D0B4F6F009E1C7B /* Pat.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 09D5B38C1D0B4F6F009E1C7B /* Pat.mp3 */; };
+		09D5B3DB1D0F366D009E1C7B /* Cheering.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 09D5B3D71D0F366D009E1C7B /* Cheering.mp3 */; };
+		09D5B3DC1D0F366D009E1C7B /* chime.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 09D5B3D81D0F366D009E1C7B /* chime.mp3 */; };
+		09D5B3DD1D0F366D009E1C7B /* Pat.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 09D5B3D91D0F366D009E1C7B /* Pat.mp3 */; };
+		09D5B3DE1D0F366D009E1C7B /* taDa.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 09D5B3DA1D0F366D009E1C7B /* taDa.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,12 +28,10 @@
 		0991C0E91D0154EC007A6644 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0991C0F41D027DD8007A6644 /* TimeIntervals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimeIntervals.swift; path = "../../../../1605 MDF2/Repository/MDF2_1605/AdaptiveLayoutProject/AdaptiveLayoutProject/TimeIntervals.swift"; sourceTree = "<group>"; };
 		0991C0F71D03CF51007A6644 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = "../../../../1605 MDF2/Repository/MDF2_1605/AdaptiveLayoutProject/AdaptiveLayoutProject/AppDelegate.swift"; sourceTree = "<group>"; };
-		09D5B3821D0B4933009E1C7B /* Cheering.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Cheering.mp3; path = ../../../../../../Desktop/Cheering.mp3; sourceTree = "<group>"; };
-		09D5B3831D0B4933009E1C7B /* NewsTheme.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = NewsTheme.mp3; path = ../../../../../../Desktop/NewsTheme.mp3; sourceTree = "<group>"; };
-		09D5B3841D0B4933009E1C7B /* taDa.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = taDa.mp3; path = ../../../../../../Desktop/taDa.mp3; sourceTree = "<group>"; };
-		09D5B3851D0B4933009E1C7B /* wrong.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = wrong.mp3; path = ../../../../../../Desktop/wrong.mp3; sourceTree = "<group>"; };
-		09D5B38A1D0B4E4F009E1C7B /* chime.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = chime.mp3; path = ../../../../../../Desktop/chime.mp3; sourceTree = "<group>"; };
-		09D5B38C1D0B4F6F009E1C7B /* Pat.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Pat.mp3; path = ../../../../../../Desktop/Pat.mp3; sourceTree = "<group>"; };
+		09D5B3D71D0F366D009E1C7B /* Cheering.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Cheering.mp3; path = ../../../Audio/Cheering.mp3; sourceTree = "<group>"; };
+		09D5B3D81D0F366D009E1C7B /* chime.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = chime.mp3; path = ../../../Audio/chime.mp3; sourceTree = "<group>"; };
+		09D5B3D91D0F366D009E1C7B /* Pat.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Pat.mp3; path = ../../../Audio/Pat.mp3; sourceTree = "<group>"; };
+		09D5B3DA1D0F366D009E1C7B /* taDa.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = taDa.mp3; path = ../../../Audio/taDa.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,12 +109,10 @@
 		0991C0F31D0155A2007A6644 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				09D5B38C1D0B4F6F009E1C7B /* Pat.mp3 */,
-				09D5B38A1D0B4E4F009E1C7B /* chime.mp3 */,
-				09D5B3821D0B4933009E1C7B /* Cheering.mp3 */,
-				09D5B3831D0B4933009E1C7B /* NewsTheme.mp3 */,
-				09D5B3841D0B4933009E1C7B /* taDa.mp3 */,
-				09D5B3851D0B4933009E1C7B /* wrong.mp3 */,
+				09D5B3D71D0F366D009E1C7B /* Cheering.mp3 */,
+				09D5B3D81D0F366D009E1C7B /* chime.mp3 */,
+				09D5B3D91D0F366D009E1C7B /* Pat.mp3 */,
+				09D5B3DA1D0F366D009E1C7B /* taDa.mp3 */,
 				0991C0E91D0154EC007A6644 /* Info.plist */,
 				0991C0E41D0154EC007A6644 /* Assets.xcassets */,
 			);
@@ -193,14 +187,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				0991C0E81D0154EC007A6644 /* LaunchScreen.storyboard in Resources */,
+				09D5B3DE1D0F366D009E1C7B /* taDa.mp3 in Resources */,
+				09D5B3DB1D0F366D009E1C7B /* Cheering.mp3 in Resources */,
+				09D5B3DC1D0F366D009E1C7B /* chime.mp3 in Resources */,
 				0991C0E51D0154EC007A6644 /* Assets.xcassets in Resources */,
-				09D5B3891D0B4933009E1C7B /* wrong.mp3 in Resources */,
-				09D5B3881D0B4933009E1C7B /* taDa.mp3 in Resources */,
+				09D5B3DD1D0F366D009E1C7B /* Pat.mp3 in Resources */,
 				0991C0E01D0154EC007A6644 /* Main.storyboard in Resources */,
-				09D5B38B1D0B4E4F009E1C7B /* chime.mp3 in Resources */,
-				09D5B38D1D0B4F6F009E1C7B /* Pat.mp3 in Resources */,
-				09D5B3861D0B4933009E1C7B /* Cheering.mp3 in Resources */,
-				09D5B3871D0B4933009E1C7B /* NewsTheme.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
