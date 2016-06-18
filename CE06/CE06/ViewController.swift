@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 import MultipeerConnectivity
 
 class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControllerDelegate {
@@ -26,10 +27,13 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
     // RPS Image Outlets
     @IBOutlet weak var player1Image: UIImageView!
     @IBOutlet weak var player2Image: UIImageView!
-    @IBOutlet var handGesture: [UIImageView]!
+    @IBOutlet weak var player1ResultImage: UIImageView!
+    @IBOutlet weak var player2ResultImage: UIImageView!
     
     // Outlets for labels to receive attributes
     @IBOutlet weak var statusLabel: UILabel!
+    @IBOutlet weak var connectionLabel: UILabel!
+    @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var player1Name: UILabel!
     @IBOutlet weak var player2Name: UILabel!
     @IBOutlet weak var player1Score: UILabel!
@@ -70,6 +74,12 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
     var count = 4.0
     var timer = NSTimer()
     
+    // Sounds for audio player
+    var tapSound = AVAudioPlayer()
+    var tadaSound = AVAudioPlayer()
+    var beepSound = AVAudioPlayer()
+    var selectSound = AVAudioPlayer()
+    
     // Tag of image for users pick
     var tagForRPS: Int = 0
     
@@ -98,17 +108,40 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
             image.layer.borderColor = UIColor.whiteColor().CGColor
         }
         
-        // Adjust Nav bar text to fit status changes
-        self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Helvetica Neue", size: 16)!]
-        
-        // Adjust bar button items to a proper size and font
-        if let font = UIFont(name: "Helvetica Neue", size: 15) {
-            connectButton.setTitleTextAttributes([NSFontAttributeName: font], forState: UIControlState.Normal)
+        // Adjustments to nav bar font based on iPhone or iPad.
+        if UIDevice.currentDevice().userInterfaceIdiom == .Phone {
+            
+            // Adjust Nav bar text to fit status changes
+            self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Helvetica Neue", size: 14)!]
+            
+            // Adjust bar button items to a proper size and font
+            if let font = UIFont(name: "Helvetica Neue", size: 14) {
+                connectButton.setTitleTextAttributes([NSFontAttributeName: font], forState: UIControlState.Normal)
+            }
+            
+            if let font = UIFont(name: "Helvetica Neue", size: 14) {
+                playNowButton?.setTitleTextAttributes([NSFontAttributeName: font], forState: UIControlState.Normal)
+            }
+                
+        } else if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+                
+            // Adjust Nav bar text to fit status changes
+            self.navigationController?.navigationBar.titleTextAttributes = [NSFontAttributeName: UIFont(name: "Helvetica Neue", size: 24)!]
+                
+            // Adjust bar button items to a proper size and font
+            if let font = UIFont(name: "Helvetica Neue", size: 20) {
+                connectButton.setTitleTextAttributes([NSFontAttributeName: font], forState: UIControlState.Normal)
+            }
+                
+            if let font = UIFont(name: "Helvetica Neue", size: 20) {
+                playNowButton?.setTitleTextAttributes([NSFontAttributeName: font], forState: UIControlState.Normal)
+            }
         }
         
-        if let font = UIFont(name: "Helvetica Neue", size: 15) {
-            playNowButton?.setTitleTextAttributes([NSFontAttributeName: font], forState: UIControlState.Normal)
-        }
+        // Hide Result Images
+        player1ResultImage.hidden = true
+        player2ResultImage.hidden = true
+        statusLabel.hidden = true
         
         // Enable button
         connectButton.enabled = true
@@ -117,7 +150,39 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
         playNowButton?.enabled = false
         
     }
-
+    
+    
+    // Sound files
+    func prepareAudios() {
+        
+        let audioPath1 = NSBundle.mainBundle().pathForResource("Pat", ofType: "mp3")
+        let error1: NSError? = nil
+        do {
+            tapSound = try AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: audioPath1!))
+        }
+        catch {
+            print("Something bad happened \(error1). Try catching specific errors to narrow things down")
+        }
+        
+        let audioPath2 = NSBundle.mainBundle().pathForResource("shorttone", ofType: "mp3")
+        let error2: NSError? = nil
+        do {
+            beepSound = try AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: audioPath2!))
+        }
+        catch {
+            print("Something bad happened \(error2). Try catching specific errors to narrow things down")
+        }
+        
+        let audioPath3 = NSBundle.mainBundle().pathForResource("select", ofType: "mp3")
+        let error3: NSError? = nil
+        do {
+            selectSound = try AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: audioPath3!))
+        }
+        catch {
+            print("Something bad happened \(error3). Try catching specific errors to narrow things down")
+        }
+    }
+    
     
     // MARK: - Lets Play Now function
     
@@ -130,10 +195,10 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
         homeView.hidden = true
         gameView.hidden = false
         
-        // Changes the userName text underneath the user's score to their name.
+        // Changes the player's name text to their name.
         player1Name.text = peerID.displayName
         
-        // Here we change the opponent name under the score to match the connected peer.
+        // Here we change the opponent's name to match the connected peer.
         player2Name.text = "\(namePlaceholder)"
         
         // Disable the search button
@@ -144,8 +209,8 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
         player2Choice = ""
         
         // These clear the images that the users is to choose.
-        player1Image.image = nil
-        player2Image.image = nil
+        player1ResultImage.image = nil
+        player2ResultImage.image = nil
         
         // Starts the countdown timer.
         timer.invalidate()
@@ -154,6 +219,12 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
     
     // MARK: - Countdown Function
     
+    // Creates the look of animation by switching between 2 images during countdown.
+    func animateFists(up: Bool) {
+        player1Image.highlighted = up
+        player2Image.highlighted = up
+    }
+    
     /// Creating this switch statement function displays the 3-2-1-SHOOT! for the game.
     func shootTimer() {
         
@@ -161,6 +232,8 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
         
         player1Image.hidden = false
         player2Image.hidden = false
+        player1Image.image = UIImage(named: "leftrock")
+        player2Image.image = UIImage(named: "rightrock")
         
         countdownLabel.hidden = false
         
@@ -168,48 +241,48 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
             
         case 4.0:
             countdownLabel.text = "READY?"
-            player1Image.highlighted = true
-            player2Image.highlighted = true
+            animateFists(false)
             count -= 0.5
         case 3.5:
             countdownLabel.text = "READY?"
-            player1Image.hidden = false
-            player2Image.hidden = false
+            animateFists(true)
             count -= 0.5
         case 3.0:
+            prepareAudios()
+            beepSound.play()
             countdownLabel.text = "\(3)"
-            player1Image.highlighted = true
-            player2Image.highlighted = true
+            animateFists(false)
             count -= 0.5
         case 2.5:
             countdownLabel.text = "\(3)"
-            player1Image.hidden = false
-            player2Image.hidden = false
+            animateFists(true)
             count -= 0.5
         case 2.0:
+            prepareAudios()
+            beepSound.play()
             countdownLabel.text = "\(2)"
-            player1Image.highlighted = true
-            player2Image.highlighted = true
+            animateFists(false)
             count -= 0.5
         case 1.5:
             countdownLabel.text = "\(2)"
-            player1Image.highlighted = false
-            player2Image.highlighted = false
+            animateFists(true)
             count -= 0.5
         case 1.0:
+            prepareAudios()
+            beepSound.play()
             countdownLabel.text = "\(1)"
-            player1Image.highlighted = true
-            player2Image.highlighted = true
+            animateFists(false)
             count -= 0.5
         case 0.5:
             countdownLabel.text = "\(1)"
-            player1Image.highlighted = false
-            player2Image.highlighted = false
+            animateFists(true)
             count -= 0.5
         case 0.0:
             countdownLabel.text = "SHOOT!!"
-            player1Image.highlighted = false
-            player2Image.highlighted = false
+            animateFists(false)
+            
+            player1Image.hidden = true
+            player2Image.hidden = true
             
             // This converts text to NSData object to sent our pick to player 2 through MC.
             if let data = player1Choice.dataUsingEncoding(NSUTF8StringEncoding) {
@@ -236,6 +309,8 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
         player2Point += 0
         player1Score.text = String(player1Point)
         player2Score.text = String(player2Point)
+        player1ResultImage.hidden = false
+        player2ResultImage.hidden = false
     }
     
     func pointPlayer2() {
@@ -243,6 +318,8 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
         player2Point += 1
         player1Score.text = String(player1Point)
         player2Score.text = String(player2Point)
+        player1ResultImage.hidden = false
+        player2ResultImage.hidden = false
     }
     
     func noPoints() {
@@ -250,6 +327,8 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
         player2Point += 0
         player1Score.text = String(player1Point)
         player2Score.text = String(player2Point)
+        player1ResultImage.hidden = false
+        player2ResultImage.hidden = false
     }
     
     // MARK: - Decide Winner Function
@@ -270,70 +349,67 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
         // Created a switch statement for Player 2's pick.
         switch player2Choice {
             
-        case "rock":
+        case "Rock":
             // Player 2 chose this image.
-            player2Image.image = UIImage(named: "rightrock")
-            self.player2Image.image = UIImage(named: "leftrock")
+            self.player2ResultImage.image = UIImage(named: "rightrock")
             
-            // If statement that checks the user's own choice and determines if the round was a tie, if the user won, or if the user lost.
-            if player1Choice == "rock" {
-                countdownLabel.text = "Tie!"
+            // If statement that checks player 1's choice and determines if there was a tie, if the user won, or if the user lost.
+            if player1Choice == "Rock" {
+                countdownLabel.text = "TIE!"
                 noPoints()
             }
-            else if player1Choice == "paper" {
-                countdownLabel.text = "Winner!!"
+            else if player1Choice == "Paper" {
+                countdownLabel.text = "WINNER!!"
                 pointPlayer1()
             }
-            else if player1Choice == "scissors" {
-                countdownLabel.text = "Loser!"
+            else if player1Choice == "Scissors" {
+                countdownLabel.text = "LOSER!"
                 pointPlayer2()
             }
             else if player2Choice == "" {
-                countdownLabel.text = "Too Slow...Lose"
+                countdownLabel.text = "Too Slow...LOSER!"
                 pointPlayer2()
             }
             
-        case "paper":
+        case "Paper":
             // Player 2 chose this image.
-            player2Image.image = UIImage(named: "rightpaper")
-            self.player2Image.image = UIImage(named: "leftpaper")
+            self.player2ResultImage.image = UIImage(named: "rightpaper")
             
-            if player1Choice == "rock" {
-                countdownLabel.text = "Loser!"
+            if player1Choice == "Rock" {
+                countdownLabel.text = "LOSER!"
                 pointPlayer2()
             }
-            else if player1Choice == "paper" {
-                countdownLabel.text = "Tie!"
+            else if player1Choice == "Paper" {
+                countdownLabel.text = "TIE!"
                 noPoints()
             }
-            else if player1Choice == "scissors" {
-                countdownLabel.text = "Winner!!"
+            else if player1Choice == "Scissors" {
+                countdownLabel.text = "WINNER!!"
                 pointPlayer1()
             }
             else if player1Choice == "" {
-                countdownLabel.text = "Too Slow...Lose!"
+                countdownLabel.text = "Too Slow...LOSER!"
                 pointPlayer2()
             }
             
-        case "scissors":
-            player2Image.image = UIImage(named: "rightscissor")
-            self.player2Image.image = UIImage(named: "leftscissor")
+        case "Scissors":
+            self.player2ResultImage.image = UIImage(named: "rightscissor")
             
-            if player1Choice == "rock" {
-                countdownLabel.text = "Winner!!"
+            if player1Choice == "Rock" {
+                countdownLabel.text = "WINNER!!"
                 pointPlayer1()
             }
-            else if player1Choice == "paper" {
-                countdownLabel.text = "Loser!"
+            else if player1Choice == "Paper" {
+                countdownLabel.text = "LOSER!"
                 pointPlayer2()
             }
-            else if player1Choice == "scissors" {
-                countdownLabel.text = "Tie!"
+            else if player1Choice == "Scissors" {
+                countdownLabel.text = "TIE!"
                 noPoints()
             }
             else if player1Choice == "" {
-                countdownLabel.text = "Too Slow..."
-                noPoints()
+                countdownLabel.text = "Too Slow...LOSER"
+                pointPlayer2()
             }
             
         default:
@@ -353,6 +429,10 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
     @IBAction func connectButton(sender: UIBarButtonItem) {
         
         print("Connect Button Tapped")
+        
+        // Play sound effect
+        prepareAudios()
+        tapSound.play()
         
         // Check if already connected
         if session != nil {
@@ -374,6 +454,10 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
     @IBAction func playNowButton(sender: UIBarButtonItem) {
         
         print("Play Now Button Tapped")
+        
+        // Play sound effect
+        prepareAudios()
+        tapSound.play()
         
         // Hide and unhide views for sign in board. Safety for storyboard settings.
         gameView.hidden = false
@@ -418,27 +502,35 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
     
     // Assigns buttons tags and their names to the images.
     @IBAction func gameButtonsRPS(sender: UIButton) {
+        
         print("Tap Choice Now 1")
+        
+        // Play sound effect
+        prepareAudios()
+        selectSound.play()
+        
         // Variable for tags on buttons.
         tagForRPS = sender.tag
         
         switch tagForRPS {
+            
         case 1:
             // Users saved pick of RPS and then display image.
-            player1Choice = "rock"
-            player1Image.image = UIImage(named: "leftrock")
-            self.player1Image.image = UIImage(named: "rightrock")
+            player1Choice = "Rock"
+            player1ResultImage.image = UIImage(named: "leftrock")
         case 2:
-            player1Choice = "paper"
-            player1Image.image = UIImage(named: "leftpaper")
-            self.player1Image.image = UIImage(named: "rightpaper")
+            player1Choice = "Paper"
+            player1ResultImage.image = UIImage(named: "leftpaper")
         case 3:
-            player1Choice = "scissors"
-            player1Image.image = UIImage(named: "leftscissor")
-            self.player1Image.image = UIImage(named: "rightscissor")
+            player1Choice = "Scissors"
+            player1ResultImage.image = UIImage(named: "leftscissor")
         default:
             print("User did not pick in time.")
         }
+        // Keep the choice image hidden.
+        player1ResultImage.hidden = true
+        player2ResultImage.hidden = true
+        
         // Call funtion to enter choice into switch and if/else statements to reveal the winner.
         showWinner()
         
@@ -451,11 +543,25 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
     // Notifies the delegate, when the user taps the done button.
     func browserViewControllerDidFinish(browserViewController: MCBrowserViewController) {
         browserViewController.dismissViewControllerAnimated(true, completion: nil)
+        // Creating tapping sound.
+        prepareAudios()
+        tapSound.play()
+        
+        // Reveal/Hide labels
+        statusLabel.hidden = false
+        titleLabel.hidden = true
     }
     
     // Notifies delegate that the user taps the cancel button.
     func browserViewControllerWasCancelled(browserViewController: MCBrowserViewController) {
         browserViewController.dismissViewControllerAnimated(true, completion: nil)
+        // Creates tapping sound.
+        prepareAudios()
+        tapSound.play()
+        
+        // Reveal/Hide labels
+        statusLabel.hidden = false
+        titleLabel.hidden = true
     }
     
     
@@ -467,6 +573,8 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
         /* This whole callback happens in a background thread*/
         dispatch_async(dispatch_get_main_queue(), {
             if state == MCSessionState.Connected {
+                
+                // Is ther 1 peer available?
                 if session.connectedPeers.count == 1 {
                     
                     // Operations once connected with an opponent.
@@ -474,6 +582,7 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
                     
                     self.navTitleMessage.title = "Connected to \(peerID.displayName)"
                     
+                    self.connectionLabel.text = "\(peerID.displayName) is not ready."
                     self.statusLabel.text = "\(peerID.displayName) is not ready."
                     
                     // Now that we have an opponent, we enable the ready to play button.
@@ -481,11 +590,13 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
                     self.playNowButton?.enabled = true
                 }
                 
+                // Message while connecting
             } else if state == MCSessionState.Connecting {
-                self.statusLabel.text = "Status: Connecting to opponent..."
+                self.navTitleMessage.title = "Status: Connecting to opponent..."
                 
+                // Methods if not connecting
             } else if state == MCSessionState.NotConnected {
-                self.statusLabel.text = "Status: No Connection."
+                self.navTitleMessage.title = "Status: No Connection."
                 
                 self.playNowButton?.enabled = false
                 self.connectButton.enabled = true
@@ -514,7 +625,7 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
         })
     }
     
-    // Received data from remote peer (Choices, readiness).
+    // Received data from remote peer (Choices, readiness). Allows players to play again once the other is ready and has tapped play now.
     func session(session: MCSession, didReceiveData data: NSData, fromPeer peerID: MCPeerID) {
         
         // Build a new String from the encoded NSData Object - Unencoding
@@ -527,52 +638,57 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
                     
                     // Updates player 2 status.
                     self.namePlaceholder = peerID.displayName
-                    self.statusLabel.text = "\(self.namePlaceholder) is ready!"
+                    self.connectionLabel.text = "\(self.namePlaceholder) is ready!"
                     self.player2Status = "true"
                     
                     // if statement to check if both opponents are ready.
-                    if self.player2Status == "true" && self.player1Status == "true" {
+                    if self.player1Status == "true" && self.player2Status == "true" {
                         self.playNow()
                     }
                 })
+                
             } else {
                 print("Tap Choice Now 2")
+                
+                // Selection sound
+                prepareAudios()
+                selectSound.play()
                 
                 // Switch statement checks for player 2's choices.
                 switch data {
                     
-                case "rock":
+                case "Rock":
                     
-                    // .
-                    self.player2Choice = "rock"
+                    // Player 2's choice sent to func show winner to determine winner..
+                    self.player2Choice = "Rock"
                     dispatch_async(dispatch_get_main_queue(), {
                         self.showWinner()
                     })
                     
-                case "paper":
-                    self.player2Choice = "paper"
+                case "Paper":
+                    self.player2Choice = "Paper"
                     dispatch_async(dispatch_get_main_queue(), {
                         self.showWinner()
                     })
                     
-                case "scissors":
-                    self.player2Choice = "scissors"
+                case "Scissors":
+                    self.player2Choice = "Scissors"
                     dispatch_async(dispatch_get_main_queue(), {
                         self.showWinner()
                     })
                     
                 case "":
-                    // .
+                    // Dispatch player 2's choice to player 1 and vice versa.
                     dispatch_async(dispatch_get_main_queue(), {
                         
                         if self.player1Choice == "" {
-                            self.countdownLabel.text = "No one shot."
+                            self.countdownLabel.text = "No one shot...DRAW"
                             self.player1Status = "false"
                             self.player2Status = "false"
                             self.playNowButton?.enabled = true
                             
                         } else {
-                            self.countdownLabel.text = "Opponent didn't shoot."
+                            self.countdownLabel.text = "Opponent didn't shoot.\n\(peerID.displayName) WINS!"
                             self.pointPlayer1()
                             self.player1Status = "false"
                             self.player2Status = "false"
@@ -583,11 +699,13 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
                 default:
                     print("Error: Try to reconnect.")
                 }
-                print("Player 2 chose: \(player2Choice)")
+                print("Player 2 chose: \(player2Choice).")
                 
                 
                 // Enables players to replay once player2 is ready.
                 dispatch_async(dispatch_get_main_queue(), {
+                    self.namePlaceholder = peerID.displayName
+                    self.connectionLabel.text = "\(self.namePlaceholder) is not ready."
                     self.statusLabel.text = "\(self.namePlaceholder) is not ready."
                     self.player2Status = "false"
                 })
@@ -602,7 +720,5 @@ class ViewController: UIViewController, MCSessionDelegate, MCBrowserViewControll
     func session(session: MCSession, didStartReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, withProgress progress: NSProgress) {}
     
     // Finished receiving a resource from remote peer and saved the content in a temporary location
-    // - the app is responsible for moving the file to a permanent location within its sandbox.
     func session(session: MCSession, didFinishReceivingResourceWithName resourceName: String, fromPeer peerID: MCPeerID, atURL localURL: NSURL, withError error: NSError?) {}
 }
-

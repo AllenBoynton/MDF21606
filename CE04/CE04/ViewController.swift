@@ -193,15 +193,6 @@ class ViewController: UIViewController, UIGestureRecognizerDelegate {
             print("Something bad happened \(error3). Try catching specific errors to narrow things down")
         }
         
-        let audioPath4 = NSBundle.mainBundle().pathForResource("wrong", ofType: "mp3")
-        let error4: NSError? = nil
-        do {
-            wrongAnswer = try AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: audioPath4!))
-        }
-        catch {
-            print("Something bad happened \(error4). Try catching specific errors to narrow things down")
-        }
-        
         let audioPath5 = NSBundle.mainBundle().pathForResource("Pat", ofType: "mp3")
         let error5: NSError? = nil
         do {

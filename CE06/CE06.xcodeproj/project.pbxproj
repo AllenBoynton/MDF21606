@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0938F1D01D13747400196DC4 /* Pat.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0938F1CD1D13747400196DC4 /* Pat.mp3 */; };
+		0938F1D31D137EE900196DC4 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0938F1D21D137EE900196DC4 /* AVFoundation.framework */; };
+		0938F1D51D1382E700196DC4 /* shorttone.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0938F1D41D1382E700196DC4 /* shorttone.mp3 */; };
+		0938F1D81D138B4100196DC4 /* select.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0938F1D61D138B4100196DC4 /* select.mp3 */; };
 		09D5B3BE1D0B6862009E1C7B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09D5B3BD1D0B6862009E1C7B /* AppDelegate.swift */; };
 		09D5B3C01D0B6862009E1C7B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09D5B3BF1D0B6862009E1C7B /* ViewController.swift */; };
 		09D5B3C31D0B6862009E1C7B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 09D5B3C11D0B6862009E1C7B /* Main.storyboard */; };
@@ -16,6 +20,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0938F1CD1D13747400196DC4 /* Pat.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = Pat.mp3; path = ../../../Audio/Pat.mp3; sourceTree = "<group>"; };
+		0938F1D21D137EE900196DC4 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		0938F1D41D1382E700196DC4 /* shorttone.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = shorttone.mp3; path = ../../../../../../Desktop/shorttone.mp3; sourceTree = "<group>"; };
+		0938F1D61D138B4100196DC4 /* select.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = select.mp3; path = ../../../../../../Desktop/select.mp3; sourceTree = "<group>"; };
 		09D5B3BA1D0B6862009E1C7B /* CE06.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CE06.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		09D5B3BD1D0B6862009E1C7B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		09D5B3BF1D0B6862009E1C7B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -31,6 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0938F1D31D137EE900196DC4 /* AVFoundation.framework in Frameworks */,
 				09D5B3D61D0B6982009E1C7B /* MultipeerConnectivity.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -69,6 +78,7 @@
 		09D5B3D01D0B6898009E1C7B /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0938F1D21D137EE900196DC4 /* AVFoundation.framework */,
 				09D5B3D51D0B6982009E1C7B /* MultipeerConnectivity.framework */,
 			);
 			name = Frameworks;
@@ -85,6 +95,9 @@
 		09D5B3D21D0B68BE009E1C7B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				0938F1D61D138B4100196DC4 /* select.mp3 */,
+				0938F1D41D1382E700196DC4 /* shorttone.mp3 */,
+				0938F1CD1D13747400196DC4 /* Pat.mp3 */,
 				09D5B3C91D0B6862009E1C7B /* Info.plist */,
 				09D5B3C41D0B6862009E1C7B /* Assets.xcassets */,
 			);
@@ -168,6 +181,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				09D5B3C81D0B6862009E1C7B /* LaunchScreen.storyboard in Resources */,
+				0938F1D51D1382E700196DC4 /* shorttone.mp3 in Resources */,
+				0938F1D81D138B4100196DC4 /* select.mp3 in Resources */,
+				0938F1D01D13747400196DC4 /* Pat.mp3 in Resources */,
 				09D5B3C51D0B6862009E1C7B /* Assets.xcassets in Resources */,
 				09D5B3C31D0B6862009E1C7B /* Main.storyboard in Resources */,
 			);
@@ -333,6 +349,7 @@
 				09D5B3CE1D0B6862009E1C7B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
